@@ -1,0 +1,49 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/swainerstag.css">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Swainer Stag Gallery</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}scripts/masonry.pkgd.min.js"></script>
+</head>
+<body>
+    <div class="images">
+        {% for thumb in thumbs %}
+            <div class="thumb">
+                <img class="thumb_image" id="{{ thumb.name }}" src="/media/thumbs/{{ thumb.name }}" alt="thumb" width="200">
+            </div>
+        {% endfor %}
+        <div id='image_preview'>
+            <div class='image_preview_img'>
+            </div>
+        </div>
+    </div>
+    <script>
+        function image_thumb_generator(path) {
+            return function(event){
+                console.log();
+                $('#image_preview').css('display', 'inline-block');
+                $('.image_preview_img').css('background-image', 'url("' + path + '")')
+            }
+        }
+
+        $(window).load(function() {
+            $('#image_preview').click(function() {
+                $('#image_preview').css('display', 'none');
+            });
+            $('.thumb_image').each(function(index, image) {
+                $(image).click(image_thumb_generator("/media/images/" + image.id));
+            });
+
+            $(".images").masonry({
+                itemSelector: '.thumb',
+                "isFitWidth": true,
+            });
+        });
+    </script>
+</body>
+</html>
